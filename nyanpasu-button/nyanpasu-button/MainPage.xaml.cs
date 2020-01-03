@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.IO;
 using System.Runtime.Serialization;
@@ -26,7 +27,7 @@ namespace nyanpasu_button
     {
         private readonly WebSocket ws;
 
-        private ISimpleAudioPlayer player = CrossSimpleAudioPlayer.Current;
+        private ISimpleAudioPlayer[] players;
 
         private const string HOST_NAME = "the-des-alizes.herokuapp.com";
 
@@ -34,9 +35,13 @@ namespace nyanpasu_button
         {
             InitializeComponent();
 
-            using (var s = typeof(App).Assembly.GetManifestResourceStream("nyanpasu-button.Resources.nyanpasu.mp3"))
+            this.players = Enumerable.Range(0, 10).Select(_ => CrossSimpleAudioPlayer.CreateSimpleAudioPlayer()).ToArray();
+            foreach (var p in this.players)
             {
-                this.player.Load(s);
+                using (var s = typeof(App).Assembly.GetManifestResourceStream("nyanpasu-button.Resources.nyanpasu.mp3"))
+                {
+                    p.Load(s);
+                }
             }
 
             this.ws = new WebSocket(string.Format("wss://{0}/ws", MainPage.HOST_NAME));
@@ -52,7 +57,11 @@ namespace nyanpasu_button
                 if (this.ws == null) { return; }
                 if (this.ws.State != WebSocketState.Open) { return; }
 
-                player.Play();
+                var player = this.players.FirstOrDefault((x) => !x.IsPlaying);
+                if (player != null)
+                {
+                    player.Play();
+                }
 
                 this.ws.Send("にゃんぱすー");
             }
