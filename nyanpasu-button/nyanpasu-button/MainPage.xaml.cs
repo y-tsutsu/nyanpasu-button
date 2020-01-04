@@ -35,19 +35,22 @@ namespace nyanpasu_button
         {
             InitializeComponent();
 
-            this.players = Enumerable.Range(0, 10).Select(_ => CrossSimpleAudioPlayer.CreateSimpleAudioPlayer()).ToArray();
-            foreach (var p in this.players)
+            if (!DesignMode.IsDesignModeEnabled)
             {
-                using (var s = typeof(App).Assembly.GetManifestResourceStream("nyanpasu-button.Resources.nyanpasu.mp3"))
+                this.players = Enumerable.Range(0, 10).Select(_ => CrossSimpleAudioPlayer.CreateSimpleAudioPlayer()).ToArray();
+                foreach (var p in this.players)
                 {
-                    p.Load(s);
+                    using (var s = typeof(App).Assembly.GetManifestResourceStream("nyanpasu-button.Resources.nyanpasu.mp3"))
+                    {
+                        p.Load(s);
+                    }
                 }
-            }
 
-            this.ws = new WebSocket(string.Format("wss://{0}/ws", MainPage.HOST_NAME));
-            this.ws.Opened += Ws_Opened;
-            this.ws.MessageReceived += Ws_MessageReceived;
-            this.ws.Open();
+                this.ws = new WebSocket(string.Format("wss://{0}/ws", MainPage.HOST_NAME));
+                this.ws.Opened += Ws_Opened;
+                this.ws.MessageReceived += Ws_MessageReceived;
+                this.ws.Open();
+            }
         }
 
         private void Button_Clicked(object sender, EventArgs e)
