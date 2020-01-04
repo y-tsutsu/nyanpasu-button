@@ -29,7 +29,7 @@ namespace nyanpasu_button
 
         private ISimpleAudioPlayer[] players;
 
-        private const string HOST_NAME = "the-des-alizes.herokuapp.com";
+        private const string HOST_NAME = "nyanpasu-server.herokuapp.com";
 
         public MainPage()
         {
