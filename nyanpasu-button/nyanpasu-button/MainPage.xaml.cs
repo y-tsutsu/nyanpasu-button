@@ -46,7 +46,7 @@ namespace nyanpasu_button
                     }
                 }
 
-                this.ws = new WebSocket(string.Format("wss://{0}/ws", MainPage.HOST_NAME));
+                this.ws = new WebSocket(string.Format($"wss://{MainPage.HOST_NAME}/ws"));
                 this.ws.Opened += Ws_Opened;
                 this.ws.MessageReceived += Ws_MessageReceived;
                 this.ws.Open();
@@ -60,18 +60,13 @@ namespace nyanpasu_button
                 if (this.ws == null) { return; }
                 if (this.ws.State != WebSocketState.Open) { return; }
 
-                var player = this.players.FirstOrDefault((x) => !x.IsPlaying);
-                if (player != null)
-                {
-                    player.Play();
-                }
-
+                this.players.FirstOrDefault((x) => !x.IsPlaying)?.Play();
                 this.ws.Send("にゃんぱすー");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("***** send error!! *****");
-                System.Diagnostics.Debug.WriteLine("***** {0} *****", ex.Message);
+                System.Diagnostics.Debug.WriteLine($"***** {ex.Message} *****");
             }
         }
 
