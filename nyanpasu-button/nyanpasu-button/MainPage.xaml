@@ -8,7 +8,7 @@
 
     <StackLayout>
         <!-- Place new controls here -->
-        <Label x:Name="label" Text="" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="Title" />
+        <Label x:Name="label" Text="" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontSize="Title" Margin="0,0,0,-10" />
         <Button x:Name="button" Text="にゃんぱすー" Clicked="Button_Clicked" Font="20" IsEnabled="False" />
         <Image Source="nonnon" />
     </StackLayout>
